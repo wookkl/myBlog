@@ -4,11 +4,13 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import {Request, Response} from "express";
 import {Routes} from "./routes";
+import {dbConnectionMiddleware} from "./middleware";
 
 createConnection().then(async connection => {
     const app = express();
     app.use(bodyParser.json());
-
+    app.use(dbConnectionMiddleware);
+    
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
             const result = (new (route.controller as any))[route.action](req, res, next);
