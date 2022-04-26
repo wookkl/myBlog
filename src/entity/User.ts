@@ -1,9 +1,9 @@
 import {Column, CreateDateColumn, Entity, ManyToOne, OneToMany, OneToOne} from "typeorm";
-import {BaseEntity, TimeStampEntity} from "../core/entity";
+import {AbstractEntity, TimeStampEntity} from "../core/entity";
 import {PostComment, UserPostLike} from "./Post";
 
 @Entity()
-export class User extends BaseEntity {
+export class User extends AbstractEntity {
   
   @Column()
   username: string;

@@ -3,11 +3,12 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import {Request, Response} from "express";
 import {Routes} from "./routes";
-import {dbConnectionMiddleware} from "./middleware";
+import {dbConnectionMiddleware, tokenAuthMiddleware} from "./middleware";
 
 const app = express();
 app.use(bodyParser.json());
 app.use(dbConnectionMiddleware);
+app.use(tokenAuthMiddleware);
 
 Routes.forEach(route => {
     (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
