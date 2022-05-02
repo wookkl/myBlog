@@ -1,3 +1,8 @@
-import {UserController} from "./controller/UserController";
+import {FollowController} from "./controller/UserController";
 
-export const Routes = [];
+export const Routes = [{
+  method: "post",
+  route: "/follow",
+  controller: FollowController,
+  action: "followOrUnfollow"
+}]

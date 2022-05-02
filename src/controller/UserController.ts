@@ -1,8 +1,16 @@
 import {getCustomRepository} from "typeorm";
-import {NextFunction, Request, Response} from "express";
-import {UserRepository} from "../repository/UserRepository";
+import {FollowRepository} from "../repository/UserRepository";
+import {NextFunction, Response} from "express";
+import {CustomRequest} from "../middleware";
 
 
-export class UserController {
-    private userRepository: UserRepository = getCustomRepository(UserRepository);
+export class FollowController {
+  constructor() {
+  }
+  
+  private repository: FollowRepository = getCustomRepository(FollowRepository);
+  
+  followOrUnfollow(request: CustomRequest, response: Response, next: NextFunction) {
+    return this.repository.createOrUpdate(request.user.id, request.body.userToId);
+  }
 }

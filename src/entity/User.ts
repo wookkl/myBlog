@@ -38,6 +38,9 @@ export class Follow extends TimeStampEntity {
   
   @ManyToOne(() => User, user => user.followed)
   userTo: User;
+  
+  @Column({default: false})
+  isRemoved: boolean;
 }
 
 

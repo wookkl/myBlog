@@ -18,6 +18,7 @@ const getOrCreateConnection = async (args: MysqlConnectionOptions): Promise<void
 export const dbConnectionMiddleware = async (request: Request, response: Response, next: NextFunction) => {
   try {
     await getOrCreateConnection(ConnectionOptions);
+    next();
   } catch (error) {
     await response.status(500).json({message: "DB Connection failed", error: error});
   }
@@ -27,14 +28,15 @@ interface TokenPayload {
   userId: number;
 }
 
-interface CustomRequest extends Request {
+export interface CustomRequest extends Request {
   user?: User;
-  headers: {[props: string]: any}
+  headers: { [props: string]: any }
 }
 
 class TokenAuthMiddleware {
   constructor(private request: CustomRequest) {
   }
+  
   private secret = process.env.WEB_TOKEN_SECRET;
   
   encode(user: User): string {
@@ -42,7 +44,7 @@ class TokenAuthMiddleware {
   }
   
   async decode(): Promise<void> {
-    try{
+    try {
       const token = this.request.headers['x-token'];
       const payload: TokenPayload = jwt.verify(token, this.secret);
       this.request.user = await User.findOne({id: payload.userId});
