@@ -1,11 +1,11 @@
-import {Column, CreateDateColumn, Entity, ManyToOne, OneToMany, OneToOne} from "typeorm";
+import {Column, CreateDateColumn, Entity, Index, ManyToOne, OneToMany, OneToOne} from "typeorm";
 import {AbstractEntity, TimeStampEntity} from "../core/entity";
 import {PostComment, UserPostLike} from "./Post";
 
 @Entity()
 export class User extends AbstractEntity {
-  
   @Column()
+  @Index({ unique: true })
   username: string;
   
   @Column()
