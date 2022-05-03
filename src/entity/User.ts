@@ -1,4 +1,5 @@
-import {Column, CreateDateColumn, Entity, Index, ManyToOne, OneToMany, OneToOne} from "typeorm";
+import * as bcrypt from 'bcrypt';
+import {BeforeInsert, Column, CreateDateColumn, Entity, Index, ManyToOne, OneToMany, OneToOne} from "typeorm";
 import {AbstractEntity, TimeStampEntity} from "../core/entity";
 import {PostComment, UserPostLike} from "./Post";
 
@@ -8,7 +9,7 @@ export class User extends AbstractEntity {
   @Index({ unique: true })
   username: string;
   
-  @Column()
+  @Column({ select: false })
   password: string;
   
   @Column({default: false})
@@ -28,6 +29,12 @@ export class User extends AbstractEntity {
   
   @OneToMany(() => PostComment, (postComment) => postComment.user)
   postComments: PostComment[];
+  
+  @BeforeInsert()
+  async encryptPassword() {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+  }
 }
 
 

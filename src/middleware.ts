@@ -20,7 +20,7 @@ export const dbConnectionMiddleware = async (request: Request, response: Respons
     await getOrCreateConnection(ConnectionOptions);
     next();
   } catch (error) {
-    await response.status(500).json({message: "DB Connection failed", error: error});
+    response.status(500).json({message: "DB Connection failed", error: error});
   }
 }
 
@@ -33,8 +33,8 @@ export interface CustomRequest extends Request {
   headers: { [props: string]: any }
 }
 
-class TokenAuthMiddleware {
-  constructor(private request: CustomRequest) {
+export class TokenAuthMiddleware {
+  constructor(private request?: CustomRequest) {
   }
   
   private secret = process.env.WEB_TOKEN_SECRET;
@@ -56,13 +56,13 @@ class TokenAuthMiddleware {
 
 export const tokenAuthMiddleware = async (request: Request, response: Response, next: NextFunction) => {
   try {
-    const authorizedPath = [];
+    const authorizedPath = ['/signup', '/login'];
     if (!authorizedPath.includes(request.path)) {
       const tokeAuthMiddlewareInstance = new TokenAuthMiddleware(request);
       await tokeAuthMiddlewareInstance.decode();
     }
     next();
   } catch (error) {
-    return response.status(403).json({message: "Token must be provided", error})
+    response.status(403).json({message: "Token must be provided", error})
   }
 }
