@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import {BeforeInsert, Column, CreateDateColumn, Entity, Index, ManyToOne, OneToMany, OneToOne} from "typeorm";
+import {BeforeInsert, Column, CreateDateColumn, Entity, Index, ManyToOne, OneToMany, OneToOne, Unique} from "typeorm";
 import {AbstractEntity, TimeStampEntity} from "../core/entity";
 import {PostComment, UserPostLike} from "./Post";
 
@@ -37,13 +37,13 @@ export class User extends AbstractEntity {
   }
 }
 
-
+@Unique(["userFrom", "userTo"])
 @Entity()
 export class Follow extends TimeStampEntity {
-  @ManyToOne(() => User, user => user.following)
+  @ManyToOne(() => User, user => user.following, {nullable: false, cascade: true})
   userFrom: User;
   
-  @ManyToOne(() => User, user => user.followed)
+  @ManyToOne(() => User, user => user.followed, {nullable: false, cascade: true})
   userTo: User;
   
   @Column({default: false})
