@@ -9,7 +9,7 @@ export class Blog extends TimeStampEntity {
   @JoinColumn()
   user: User;
   
-  @Column()
+  @Column({default: 0})
   total_visit_count: number;
   
   @Column()
