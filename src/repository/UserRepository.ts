@@ -23,7 +23,7 @@ export class UserRepository extends Repository<User> {
   
   async login(credential: { username: string, password: string }): Promise<TokenResponse> {
     const user = await super.createQueryBuilder("user")
-      .select(["user.username",  "user.password"])
+      .select(["user.id", "user.username",  "user.password"])
       .where("user.username = :username", { username: credential.username })
       .getOne();
     if (user === undefined) {
@@ -59,6 +59,5 @@ export class FollowRepository extends Repository<Follow> {
       follow.isRemoved = !follow.isRemoved;
     }
     await super.save(follow);
-    return follow;
   }
 }

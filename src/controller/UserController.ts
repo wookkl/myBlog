@@ -29,7 +29,8 @@ export class FollowController {
   
   private repository: FollowRepository = getCustomRepository(FollowRepository);
   
-  followOrUnfollow(request: CustomRequest, response: Response, next: NextFunction) {
-    return this.repository.createOrUpdate(request.user.id, request.body.userToId);
+  async followOrUnfollow(request: CustomRequest, response: Response, next: NextFunction) {
+    await this.repository.createOrUpdate(request.user.id, request.body.userToId);
+    response.status(200).json();
   }
 }
