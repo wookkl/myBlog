@@ -40,21 +40,13 @@ export class UserRepository extends Repository<User> {
 
 @EntityRepository(Follow)
 export class FollowRepository extends Repository<Follow> {
-  async createOrUpdate(userFromId: number, userToId: number) {
-    const findData = {
-      userFrom: {
-        id: userFromId
-      },
-      userTo: {
-        id: userToId
-      }
-    };
+  async createOrUpdate(entityLike: DeepPartial<Follow>) {
     let follow = await super.findOne({
       relations: ["userFrom", "userTo"],
-      where: findData
+      where: entityLike
     });
     if (follow === undefined) {
-      follow = await super.create(findData);
+      follow = await super.create(entityLike);
     } else {
       follow.isRemoved = !follow.isRemoved;
     }

@@ -2,6 +2,7 @@ import {getCustomRepository} from "typeorm";
 import {FollowRepository, UserRepository} from "../repository/UserRepository";
 import {NextFunction, Request, Response} from "express";
 import {CustomRequest} from "../middleware";
+import {userEmitter} from "../emitter/UserEmitter";
 
 
 export class UserController {
@@ -9,12 +10,15 @@ export class UserController {
   }
   
   private repository: UserRepository = getCustomRepository(UserRepository);
+  private emitter = userEmitter;
   
   async signUp(request: Request, response: Response, next: NextFunction) {
-    const data = this.repository.signUp(request.body);
-    await this.repository.save(data.user);
-    delete data.user.password;
-    response.status(201).json(data);
+    const {user, token} = this.repository.signUp(request.body);
+    await this.repository.save(user);
+    this.emitter.emit('createUser', user);
+    
+    delete user.password;
+    response.status(201).json({token, user});
   }
   
   async login(request: Request, response: Response, next: NextFunction) {
@@ -30,7 +34,15 @@ export class FollowController {
   private repository: FollowRepository = getCustomRepository(FollowRepository);
   
   async followOrUnfollow(request: CustomRequest, response: Response, next: NextFunction) {
-    await this.repository.createOrUpdate(request.user.id, request.body.userToId);
+    const findData = {
+      userFrom: {
+        id: request.user.id
+      },
+      userTo: {
+        id: request.body.userToId
+      }
+    };
+    await this.repository.createOrUpdate(findData);
     response.status(200).json();
   }
 }
