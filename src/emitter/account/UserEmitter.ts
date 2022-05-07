@@ -1,7 +1,7 @@
 import * as events from "events";
-import {User} from "../entity/User";
+import {User} from "../../entity/account/User";
 import {getCustomRepository} from "typeorm";
-import {BlogRepository} from "../repository/BlogRepository";
+import {BlogRepository} from "../../repository/blog/BlogRepository";
 
 export const userEmitter = new events.EventEmitter();
 

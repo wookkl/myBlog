@@ -1,5 +1,5 @@
 import {EntityRepository, Repository} from "typeorm";
-import {Blog} from "../entity/Blog";
+import {Blog} from "../../entity/blog/Blog";
 import {DeepPartial} from "typeorm/common/DeepPartial";
 
 @EntityRepository(Blog)

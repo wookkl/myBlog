@@ -3,7 +3,7 @@ import * as typeORM from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import ConnectionOptions from "../ormconfig";
 import * as jwt from "jsonwebtoken";
-import {User} from "./entity/User";
+import {User} from "./entity/account/User";
 import {InvalidTokenException} from "./utils/exceptions";
 
 
@@ -56,7 +56,7 @@ export class TokenAuthMiddleware {
 
 export const tokenAuthMiddleware = async (request: Request, response: Response, next: NextFunction) => {
   try {
-    const authorizedPath = ['/signup', '/login'];
+    const authorizedPath = ['/user/signup', '/user/login'];
     if (!authorizedPath.includes(request.path)) {
       const tokeAuthMiddlewareInstance = new TokenAuthMiddleware(request);
       await tokeAuthMiddlewareInstance.decode();

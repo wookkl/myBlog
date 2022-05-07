@@ -1,7 +1,7 @@
 import {EntityRepository, Repository} from "typeorm";
-import {Follow, User} from "../entity/User";
+import {Follow, User} from "../../entity/account/User";
 import {DeepPartial} from "typeorm/common/DeepPartial";
-import {TokenAuthMiddleware} from "../middleware";
+import {TokenAuthMiddleware} from "../../middleware";
 import * as bcrypt from "bcrypt";
 
 export interface UserCreateResponse {

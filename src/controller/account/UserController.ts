@@ -1,8 +1,8 @@
 import {getCustomRepository} from "typeorm";
-import {FollowRepository, UserRepository} from "../repository/UserRepository";
+import {FollowRepository, UserRepository} from "../../repository/account/UserRepository";
 import {NextFunction, Request, Response} from "express";
-import {CustomRequest} from "../middleware";
-import {userEmitter} from "../emitter/UserEmitter";
+import {CustomRequest} from "../../middleware";
+import {userEmitter} from "../../emitter/account/UserEmitter";
 
 
 export class UserController {
@@ -12,7 +12,7 @@ export class UserController {
   private repository: UserRepository = getCustomRepository(UserRepository);
   private emitter = userEmitter;
   
-  async signUp(request: Request, response: Response, next: NextFunction) {
+  async signUp(request: CustomRequest, response: Response, next: NextFunction) {
     const {user, token} = this.repository.signUp(request.body);
     await this.repository.save(user);
     this.emitter.emit('createUser', user);
@@ -21,9 +21,22 @@ export class UserController {
     response.status(201).json({token, user});
   }
   
-  async login(request: Request, response: Response, next: NextFunction) {
+  async login(request: CustomRequest, response: Response, next: NextFunction) {
     const data = await this.repository.login(request.body);
     response.status(200).json(data);
+  }
+  
+  async me(request: CustomRequest, response: Response, next: NextFunction) {
+    response.status(200).json({
+      username: request.user.username,
+    });
+  }
+  
+  async other(request: CustomRequest, response: Response, next: NextFunction) {
+    const user = await this.repository.findOne(request.params.id);
+    response.status(200).json({
+      username: user.username
+    })
   }
 }
 

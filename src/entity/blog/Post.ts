@@ -1,6 +1,6 @@
-import {User} from "./User";
+import {User} from "../account/User";
 import {Column, Entity, ManyToOne, OneToMany} from "typeorm";
-import {TimeStampEntity} from "../core/entity";
+import {TimeStampEntity} from "../../core/entity";
 import {Blog} from "./Blog";
 
 @Entity()

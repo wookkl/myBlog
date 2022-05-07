@@ -1,18 +1,29 @@
-import {FollowController, UserController} from "./controller/UserController";
+import {FollowController, UserController} from "./controller/account/UserController";
 
 export const Routes = [{
   method: "post",
-  route: "/follow",
+  route: "/user/follow",
   controller: FollowController,
   action: "followOrUnfollow"
 }, {
   method: "post",
-  route: "/signup",
+  route: "/user/signup",
   controller: UserController,
   action: "signUp"
 }, {
   method: "post",
-  route: "/login",
+  route: "/user/login",
   controller: UserController,
   action: "login"
-}]
+}, {
+  method: "get",
+  route: "/user/me",
+  controller: UserController,
+  action: "me"
+}, {
+  method: "get",
+  route: "/user/:id",
+  controller: UserController,
+  action: "other"
+}
+]
