@@ -5,8 +5,8 @@ import {Blog} from "./Blog";
 
 @Entity()
 export class Post extends TimeStampEntity {
-  @ManyToOne(() => Blog, (blog) => blog.posts)
-  blog: Blog;
+  @ManyToOne(() => User, (user) => user.posts)
+  user: User;
   
   @Column()
   title: string;

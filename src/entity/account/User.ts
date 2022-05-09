@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import {BeforeInsert, Column, CreateDateColumn, Entity, Index, ManyToOne, OneToMany, OneToOne, Unique} from 'typeorm';
 import {AbstractEntity, TimeStampEntity} from '../../core/entity';
-import {PostComment, UserPostLike} from '../blog/Post';
+import {Post, PostComment, UserPostLike} from '../blog/Post';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -17,6 +17,9 @@ export class User extends AbstractEntity {
   
   @CreateDateColumn()
   dateJoined: Date
+  
+  @OneToMany(() => Post, post => post.user)
+  posts: Post[];
   
   @OneToMany(() => Follow, follow => follow.userFrom)
   following: Follow[];

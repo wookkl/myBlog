@@ -14,7 +14,4 @@ export class Blog extends TimeStampEntity {
   
   @Column()
   title: string;
-  
-  @OneToMany(() => Post, post => post.blog)
-  posts: Post[];
 }
