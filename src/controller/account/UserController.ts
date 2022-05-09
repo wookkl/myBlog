@@ -8,8 +8,7 @@ import {userEmitter} from "../../emitter/account/UserEmitter";
 export class UserController {
   constructor() {
   }
-  
-  private repository: UserRepository = getCustomRepository(UserRepository);
+  private repository = getCustomRepository(UserRepository);
   private emitter = userEmitter;
   
   async signUp(request: CustomRequest, response: Response, next: NextFunction) {
@@ -27,16 +26,12 @@ export class UserController {
   }
   
   async me(request: CustomRequest, response: Response, next: NextFunction) {
-    response.status(200).json({
-      username: request.user.username,
-    });
+    response.status(200).json(request.user);
   }
   
   async other(request: CustomRequest, response: Response, next: NextFunction) {
     const user = await this.repository.findOne(request.params.id);
-    response.status(200).json({
-      username: user.username
-    })
+    response.status(200).json(user);
   }
 }
 
@@ -44,7 +39,7 @@ export class FollowController {
   constructor() {
   }
   
-  private repository: FollowRepository = getCustomRepository(FollowRepository);
+  private repository = getCustomRepository(FollowRepository);
   
   async followOrUnfollow(request: CustomRequest, response: Response, next: NextFunction) {
     const findData = {

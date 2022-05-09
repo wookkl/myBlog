@@ -1,4 +1,5 @@
 import {FollowController, UserController} from "./controller/account/UserController";
+import {BlogController} from "./controller/blog/BlogController";
 
 export const Routes = [{
   method: "post",
@@ -25,5 +26,14 @@ export const Routes = [{
   route: "/user/:id",
   controller: UserController,
   action: "other"
-}
-]
+}, {
+  method: "get",
+  route: "/blog/mine",
+  controller: BlogController,
+  action: "mine"
+}, {
+  method: "get",
+  route: "/blog/:id",
+  controller: BlogController,
+  action: "other"
+}]

@@ -5,6 +5,8 @@ import ConnectionOptions from "../ormconfig";
 import * as jwt from "jsonwebtoken";
 import {User} from "./entity/account/User";
 import {InvalidTokenException} from "./utils/exceptions";
+import {getCustomRepository} from "typeorm";
+import {UserRepository} from "./repository/account/UserRepository";
 
 
 const getOrCreateConnection = async (args: MysqlConnectionOptions): Promise<void> => {
@@ -36,7 +38,7 @@ export interface CustomRequest extends Request {
 export class TokenAuthMiddleware {
   constructor(private request?: CustomRequest) {
   }
-  
+  private userRepository = getCustomRepository(UserRepository);
   private secret = process.env.WEB_TOKEN_SECRET;
   
   encode(user: User): string {
@@ -46,8 +48,8 @@ export class TokenAuthMiddleware {
   async decode(): Promise<void> {
     try {
       const token = this.request.headers['x-token'];
-      const payload: TokenPayload = jwt.verify(token, this.secret);
-      this.request.user = await User.findOne({id: payload.userId});
+      const payload = jwt.verify(token, this.secret);
+      this.request.user = await this.userRepository.findOne({id: payload.userId});
     } catch (error) {
       throw new InvalidTokenException();
     }
@@ -56,7 +58,7 @@ export class TokenAuthMiddleware {
 
 export const tokenAuthMiddleware = async (request: Request, response: Response, next: NextFunction) => {
   try {
-    const authorizedPath = ['/user/signup', '/user/login'];
+    const authorizedPath = ['/user/signup', '/user/login', 'blog/other'];
     if (!authorizedPath.includes(request.path)) {
       const tokeAuthMiddlewareInstance = new TokenAuthMiddleware(request);
       await tokeAuthMiddlewareInstance.decode();
