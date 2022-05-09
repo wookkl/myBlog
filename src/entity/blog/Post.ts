@@ -15,13 +15,13 @@ export class Post extends TimeStampEntity {
   content: string;
   
   @Column({default: 0})
-  view_count: number;
+  viewCount: number;
   
   @Column({default: false})
-  is_removed: boolean;
+  isRemoved: boolean;
   
   @Column({default: false})
-  is_private: boolean;
+  isPrivate: boolean;
   
   @OneToMany(() => UserPostLike, userLike => userLike.post)
   userLikes: UserPostLike[];
