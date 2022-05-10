@@ -16,6 +16,12 @@ export class PostController {
     response.status(200).json(data);
   }
   
+  async create(request: CustomRequest, response: Response, next: NextFunction) {
+    const post = this.repository.create({...request.body, user: request.user.id});
+    await this.repository.save(post);
+    response.status(200).json(post);
+  }
+  
   async getListOther(request: CustomRequest, response: Response, next: NextFunction) {
     const pageSize = Number(request.query.pageSize);
     const page = Number(request.query.page);

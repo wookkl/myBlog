@@ -47,4 +47,9 @@ export const Routes = [{
   route: "/post/other",
   controller: PostController,
   action: "getListOther"
+}, {
+  method: "post",
+  route: "/post",
+  controller: PostController,
+  action: "create"
 }]
