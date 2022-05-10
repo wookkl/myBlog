@@ -8,7 +8,8 @@ export class PostRepository extends Repository<Post> {
   async findByUserId(userId: number, page?: number, pageSize?: number): Promise<PaginationResponse<Post>> {
     let posts = await this.createQueryBuilder("post")
       .select(["*"])
-      .where("post.user = :userId", {userId: userId});
+      .where("post.user = :userId", {userId: userId})
+      .orderBy('post.createdAt', 'DESC');
     return await this.paginator.paginate(posts, page, pageSize);
   }
 }
