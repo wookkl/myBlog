@@ -58,7 +58,7 @@ export class TokenAuthMiddleware {
 
 export const tokenAuthMiddleware = async (request: Request, response: Response, next: NextFunction) => {
   try {
-    const authorizedPath = ['/user/signup', '/user/login', 'blog/other'];
+    const authorizedPath = ['/user/signup', '/user/login', '/blog/:id', '/post/other'];
     if (!authorizedPath.includes(request.path)) {
       const tokeAuthMiddlewareInstance = new TokenAuthMiddleware(request);
       await tokeAuthMiddlewareInstance.decode();
