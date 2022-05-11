@@ -9,8 +9,8 @@ export class PageNumberPaginator {
   constructor() {
   }
   
-  async paginate<T>(queryBuilder: SelectQueryBuilder<T>, page: number = 1, pageSize: number = 5): Promise<PaginationResponse<T>> {
+  async paginate<T>(queryBuilder: SelectQueryBuilder<T>, page: number, pageSize: number): Promise<PaginationResponse<T>> {
     const [data, count] =  await queryBuilder.take(pageSize).skip(pageSize * Number(page - 1)).getManyAndCount();
-    return {data, totalPage: Math.ceil(count / 10)};
+    return {data, totalPage: Math.ceil(count / pageSize)};
   }
 }
