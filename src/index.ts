@@ -2,7 +2,7 @@ import "reflect-metadata";
 import * as express from "express";
 import {Request, Response} from "express";
 import * as bodyParser from "body-parser";
-import {Routes} from "./routes";
+import {Routes} from "./routes/routes";
 import {dbConnectionMiddleware, tokenAuthMiddleware} from "./middleware";
 
 const app = express();
