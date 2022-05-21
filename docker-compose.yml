@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  node:
+    build: .
+    ports:
+      - "8080:3000"
+    depends_on:
+      - db
+    networks:
+      - db-network
+  db:
+    image: mysql:8
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
+    networks:
+      - db-network
+networks:
+    db-network:
