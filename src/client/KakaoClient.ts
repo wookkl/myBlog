@@ -1,11 +1,10 @@
-import fetch from 'node-fetch';
-import {Headers} from 'node-fetch';
+import fetch, {Headers} from "node-fetch";
 
 
 class KakaoClient {
   contentType = "application/x-www-form-urlencoded;charset=utf-8";
   domain = "kakao.com";
-  scheme = 'https'
+  scheme = "https"
   subDomain: string;
   
   constructor() {
@@ -17,20 +16,15 @@ class KakaoClient {
   }
   
   _handleException(response) {
-    switch (response.statusCode) {
-      case 200:
-        return response;
-      case 401:
-        throw Error();
-      case 400:
-        throw Error();
+    if (response.statusCode === 200) {
+      return response;
     }
     const responseJson = response.json();
-    let errorCode = responseJson.get('code');
-    let errorMsg = responseJson.get('message');
-    if (responseJson.has('error')) {
-      errorCode = responseJson.get('error')
-      errorMsg = responseJson.get('error_description')
+    let errorCode = responseJson.get("code");
+    let errorMsg = responseJson.get("message");
+    if (responseJson.has("error")) {
+      errorCode = responseJson.get("error")
+      errorMsg = responseJson.get("error_description")
     }
     throw Error(`${response.status_code} - ${errorCode} - ${errorMsg}`);
   }
@@ -39,9 +33,12 @@ class KakaoClient {
     return `${this.scheme}://${this.subDomain}.${this.domain}`;
   }
   
-  getEndpoint(path: string = "", queryParams?) {
+  getEndpoint(path: string, queryParams?: {[key: string]: any }) {
     let endpoint = this.getBaseUrl() + path;
     let queryParamStr = "";
+    if (queryParams === undefined) {
+      return endpoint
+    }
     queryParams.forEach(key => {
       queryParamStr += `${key}=${queryParams[key]}`;
     });
@@ -67,7 +64,7 @@ class KakaoClient {
 class KakaoAuthClient extends KakaoClient {
   clientId = process.env.KAKAO_REST_API_KEY;
   clientSecret = process.env.KAKAO_SECURITY_KEY;
-  subDomain = 'kauth';
+  subDomain = "kauth";
   
   constructor() {
     super();
@@ -105,11 +102,11 @@ class KakaoAuthClient extends KakaoClient {
 
 
 class KakaoAPIClient extends KakaoClient {
-  subDomain = 'kapi'
+  subDomain = "kapi"
   
   async requestUserInfo(accessToken: string) {
     const queryParams = {
-      'secure_resource': 'true'
+      "secure_resource": "true"
     }
     const url = this.getEndpoint("/v2/user/me", queryParams);
     let headers = this.getDefaultHeaders();
